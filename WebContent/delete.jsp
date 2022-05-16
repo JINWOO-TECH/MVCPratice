@@ -10,7 +10,7 @@
 <body>
 <h1>제품번호 : ${param.code }를 <br>
 <c:if test="${count==1  }">삭제를 성공했습니다.</c:if>
-<c:if test="${count!=1  }">삭제를 실패했습니다.</c:if>
+<c:if test="${count!=1  }">삭제를 실패했습니다zz.</c:if>
 </h1>
 <a href="main.do">돌아가기</a>
 </body>
