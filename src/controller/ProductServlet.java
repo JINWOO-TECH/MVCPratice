@@ -136,7 +136,44 @@ public class ProductServlet extends HttpServlet {
 			rd.forward(request, response);
 			
 		}
+		
+		else if(str.equals("/PreferredProduct.do") || str.equals("/selectRank.do") ) {
+			MainDAOImpl dao = new MainDAOImpl();
+			RequestDispatcher rd=null;
+			String sql = null;
+			if(str.equals("/PreferredProduct.do")){
+				try {
+					sql = "select * from  product  where 목표수량*0.2 > 재고수량";
+					request.setAttribute("list",dao.ProductList(sql) );
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				rd= request.getRequestDispatcher("/PreferredProduct.jsp");
+			}
+			else {
+				try {
+					sql = "select * from  product  order by(출고가-제품원가)*재고수량 desc";
+					request.setAttribute("list",dao.ProductList(sql) );
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				rd= request.getRequestDispatcher("/selectRank.jsp");
+			}
 
+			rd.forward(request, response);	
+		}
+		
+		else if(str.equals("/groupRemain.do")) {
+			MainDAOImpl dao = new MainDAOImpl();
+			try {
+				request.setAttribute("list",dao.groupRemain() );
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			RequestDispatcher rd= request.getRequestDispatcher("/groupRemain.jsp");
+			rd.forward(request, response);
+			
+		}
 
 	}
 

@@ -79,11 +79,7 @@ public class MainDAOImpl extends DAOBase implements SampleDAO {
 		return product;
 	}
 
-	@Override
-	public List<ProductVO> readList() throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public int update(ProductVO vo) throws SQLException {
@@ -117,7 +113,50 @@ public class MainDAOImpl extends DAOBase implements SampleDAO {
 		closeDBResources(null,pstmt,conn);
 		return result;
 	}
+	//우선생산제품
+	@Override
+	public List<ProductVO> ProductList(String sql) throws SQLException {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<ProductVO> productList= new ArrayList<ProductVO>();
+		pstmt=conn.prepareStatement(sql);
+		rs = pstmt.executeQuery();
+		while(rs.next()) {
+			ProductVO product = new ProductVO();
+			product.setCode(rs.getString(1));
+			product.setPname(rs.getString(2));
+			product.setCost(rs.getInt(3));
+			product.setPnum(rs.getInt(4));
+			product.setJnum(rs.getInt(5));
+			product.setSale(rs.getInt(6));
+			product.setGcode(rs.getNString(7));
+//			System.out.println(product);//확인
+			productList.add(product);
+		}
+		closeDBResources(null,pstmt,conn);
+		return productList;
+	}
 
+	@Override
+	public List<ProductVO> groupRemain() throws SQLException {
+		Connection conn = getConnection();
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<ProductVO> groupRemain= new ArrayList<ProductVO>();
+		String  sql  = "select  그룹코드, sum(재고수량) from  product  group by  그룹코드";
+		pstmt=conn.prepareStatement(sql);
+		rs = pstmt.executeQuery();
+		while(rs.next()) {
+			ProductVO product = new ProductVO();
+			product.setCode(rs.getString(1));
+			product.setJnum(rs.getInt(2));
+			System.out.println(product);//확인
+			groupRemain.add(product);
+		}
+		closeDBResources(null,pstmt,conn);
+		return groupRemain;
+	}
 
 
 }
